@@ -8,9 +8,9 @@ require "crystalManager"
 Screen = require "lib.shack.shack"
 Bg, _ = require "effects.background"
 
-joystick = love.joystick.getJoysticks()[1]
+Joystick = love.joystick.getJoysticks()[1]
 
-iceConfig = {
+IceConfig = {
     left = "left",
     up = "up",
     down = "down",
@@ -42,7 +42,7 @@ iceConfig = {
     sprite = "assets/ice_cube.png"
 }
 
-fireConfig = {
+FireConfig = {
     up = "w",
     left = "a",
     down = "s",
@@ -74,7 +74,7 @@ fireConfig = {
     sprite = "assets/magma_cube.png"
 }
 
-menuConfig = {
+MenuConfig = {
     upKey = "up",
     downKey = "down",
     selectKey = "space",
@@ -84,7 +84,7 @@ menuConfig = {
     selectButton = "a",
 }
 
-iceCrystalConfig = {
+IceCrystalConfig = {
     audio = {
         kill = love.audio.newSource("assets/audio/water-barrel.mp3", "static"),
     },
@@ -107,7 +107,7 @@ iceCrystalConfig = {
     }
 }
 
-fireBarrelConfig = {
+FireBarrelConfig = {
     audio = {
         kill = love.audio.newSource("assets/audio/fire-barrel.mp3", "static"),
     },
@@ -146,11 +146,11 @@ function love.load()
     Screen:setShake(20)
 
     GameWorld = GWorld:new()
-    IcePlayer = Player:new(iceConfig)
-    FirePlayer = Player:new(fireConfig)
-    IceCrystalManager = CrystalManager:new(iceCrystalConfig)
-    FireCrystalManager = CrystalManager:new(fireBarrelConfig)
-    backgroundMusic = love.audio.newSource("assets/audio/bgm.mp3", "stream")
+    IcePlayer = Player:new(IceConfig)
+    FirePlayer = Player:new(FireConfig)
+    IceCrystalManager = CrystalManager:new(IceCrystalConfig)
+    FireCrystalManager = CrystalManager:new(FireBarrelConfig)
+    BackgroundMusic = love.audio.newSource("assets/audio/bgm.mp3", "stream")
     Game:load()
 
     Explosion.load()
@@ -178,9 +178,9 @@ function love.update(dt)
         end
         Background:update(Temperature)
     end
-    if not backgroundMusic:isPlaying() then
-        backgroundMusic:setVolume(0.8)
-        backgroundMusic:play()
+    if not BackgroundMusic:isPlaying() then
+        BackgroundMusic:setVolume(0.8)
+        BackgroundMusic:play()
     end
 end
 

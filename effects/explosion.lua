@@ -1,4 +1,3 @@
-
 -- explosion.lua
 local Explosion = {}
 Explosion.__index = Explosion

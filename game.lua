@@ -16,7 +16,7 @@ function Game.load()
     gauge = Thermo.new { x = WindowWidth / 2, y = 50, height = 220, width = 24, bulbRadius = 28, min = COLD_WIN, max = HOT_WIN, value = 0 }
 end
 
-function Game.update(dt)
+function Game.update()
 end
 
 function ChangeScore(value)
@@ -27,7 +27,7 @@ function ChangeScore(value)
     end
 end
 
-function PlayerWin(side, score)
+function PlayerWin()
     State.current = "GameOver"
 end
 

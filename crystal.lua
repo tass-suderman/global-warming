@@ -13,7 +13,7 @@ function Crystal:new(x, y, sprite, config)
     return obj
 end
 
-function Crystal:update(dt)
+function Crystal:update()
     if((self.config.faction == "Ice" and self.collider:enter("FireBullet")) or
          (self.config.faction == "Fire" and self.collider:enter("IceBullet"))) then
           self.config.audio.kill:clone():play()

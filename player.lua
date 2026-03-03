@@ -40,16 +40,15 @@ function Player:update(dt)
     self.jumpCooldown = self.jumpCooldown + dt
     self.shootCooldown = self.shootCooldown + dt
     self.invulnerableTime = math.max(self.invulnerableTime - dt, 0)
-    self:manageGamepadInputs(dt)
+    self:manageGamepadInputs()
     self:manageKeyboardInputs()
     self:updateBullets(dt)
-    self:handleCollision(dt)
+    self:handleCollision()
 end
 
-function Player:manageGamepadInputs(dt)
-    local px, py = self.collider:getLinearVelocity()
+function Player:manageGamepadInputs()
+    local _, py = self.collider:getLinearVelocity()
     local joysticks = love.joystick.getJoysticks()
-    
     if #joysticks >= self.config.gamepadIndex and joysticks[self.config.gamepadIndex]:isGamepad() then
         local joystick = joysticks[self.config.gamepadIndex]
         local axisX = joystick:getGamepadAxis(self.config.joystickLeft)
@@ -98,7 +97,7 @@ function Player:manageKeyboardInputs()
         self.collider:applyLinearImpulse(1000, 0)
     end
     if love.keyboard.isDown(self.config.up) and py == 0 then
-        self.collider:applyLinearImpulse(0, -5000)
+			self:tryJump(-1)
     end
 end
 
@@ -117,11 +116,11 @@ function Player:updateBullets(dt)
     for _, i in ipairs(removableItems) do
         table.remove(self.bullets, i)
     end
-    self:handleCollision(dt)
+    self:handleCollision()
 end
 
 function Player:tryMoveHorizontal(movementAmount, isSprinting)
-    local px, py = self.collider:getLinearVelocity()
+    local px, _ = self.collider:getLinearVelocity()
     local maxSpeed = isSprinting and (XMaxSpeed * SprintFactor) or XMaxSpeed
     if(math.abs(px) < maxSpeed) then
         local accel = isSprinting and (XAcceleration * SprintFactor) or XAcceleration
@@ -151,7 +150,7 @@ function Player:handleCollision()
     if self.collider:enter("Terrain") then
         self.onGround = true
         local joystick = love.joystick.getJoysticks()[self.config.gamepadIndex]
-        if joystick:isGamepadDown(self.config.jumpButton) then
+        if joystick ~= nil and joystick:isGamepadDown(self.config.jumpButton) then
             self:tryJump(-0.2 )
         end
     end
@@ -191,7 +190,6 @@ function Player:draw()
     love.graphics.push("all")
     love.graphics.setColor(1, 1, 1)
     local px, py = self.collider:getPosition()
-    local drawCenter = { x = px - (self.size.x / 2), y = py - (self.size.y / 2) }
 
     love.graphics.draw(
         self.sprite,

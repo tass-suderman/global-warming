@@ -21,40 +21,40 @@ function GWorld:new()
 
     obj.world = wf.newWorld(0, Gravity)
 
-    addCollisionClasses(obj.world)
+    AddCollisionClasses(obj.world)
 
-    obj.leftBoundary                          = addStaticObject(obj.world, 0, 0, 1, WindowHeight, false)
-    obj.rightBoundary                         = addStaticObject(obj.world, WindowWidth - 1, 0, 1, WindowHeight, false)
-    obj.topBoundary                           = addStaticObject(obj.world, 0, 0, WindowWidth, 1, false)
-    obj.ground                                = addStaticObject(obj.world, (WindowWidth - GroundWidth) / 2,
+    obj.leftBoundary                          = AddStaticObject(obj.world, 0, 0, 1, WindowHeight, false)
+    obj.rightBoundary                         = AddStaticObject(obj.world, WindowWidth - 1, 0, 1, WindowHeight, false)
+    obj.topBoundary                           = AddStaticObject(obj.world, 0, 0, WindowWidth, 1, false)
+    obj.ground                                = AddStaticObject(obj.world, (WindowWidth - GroundWidth) / 2,
         WindowHeight - GroundHeight, GroundWidth, GroundHeight, false)
-    obj.centreWall                            = addStaticObject(obj.world, (WindowWidth - WallWidth * 1.5) / 2,
+    obj.centreWall                            = AddStaticObject(obj.world, (WindowWidth - WallWidth * 1.5) / 2,
         WindowHeight - JumpHeight, WallWidth * 1.5, WallHeight, true)
 
-    obj.leftMarginWall, obj.rightMarginWall   = addMirroredWalls(obj.world, CloseSideWallMargin,
+    obj.leftMarginWall, obj.rightMarginWall   = AddMirroredWalls(obj.world, CloseSideWallMargin,
         WindowHeight - (JumpHeight * 1.75), WallWidth, WallHeight)
-    obj.leftCornerWall, obj.rightCornerWall   = addMirroredWalls(obj.world, 0, WindowHeight - (JumpHeight * 1.75) +
+    obj.leftCornerWall, obj.rightCornerWall   = AddMirroredWalls(obj.world, 0, WindowHeight - (JumpHeight * 1.75) +
         WallHeight, WallWidth * .75, WallHeight)
-    obj.leftHighWall, obj.rightHighWall       = addMirroredWalls(obj.world, WallWidth * 1.75,
+    obj.leftHighWall, obj.rightHighWall       = AddMirroredWalls(obj.world, WallWidth * 1.75,
         WindowHeight - (JumpHeight * 2.5), WallWidth / 2, WallHeight * .75)
-    obj.leftLookoutWall, obj.rightLookoutWall = addMirroredWalls(obj.world, WallWidth * 1.5,
+    obj.leftLookoutWall, obj.rightLookoutWall = AddMirroredWalls(obj.world, WallWidth * 1.5,
         WindowHeight - (JumpHeight * 3.25), WallWidth / 4, WallHeight * .75)
 
-    obj.highCentreField                       = addEnergyField(obj.world, WallWidth * 2.25,
+    obj.highCentreField                       = AddEnergyField(obj.world, WallWidth * 2.25,
         WindowHeight - (JumpHeight * 2.4), WindowWidth - WallWidth * 2.25, WindowHeight - (JumpHeight * 2.4))
 
-    obj.centreField                           = addEnergyField(obj.world, WindowWidth / 2, WindowHeight - GroundHeight,
+    obj.centreField                           = AddEnergyField(obj.world, WindowWidth / 2, WindowHeight - GroundHeight,
         WindowWidth / 2, WindowHeight - JumpHeight + WallHeight)
 
-    obj.leftEnergyField, obj.rightEnergyField = addMirroredEnergyFields(obj.world, WallWidth * 1.75,
+    obj.leftEnergyField, obj.rightEnergyField = AddMirroredEnergyFields(obj.world, WallWidth * 1.75,
         WindowHeight - (JumpHeight * 2.5), WallWidth * 1.75, WindowHeight - (JumpHeight * 3.25))
 
-    obj.floorKillField                        = addKillField(obj.world, - 100, WindowHeight + 50, WindowWidth+ 200, 1)
+    obj.floorKillField                        = AddKillField(obj.world, - 100, WindowHeight + 50, WindowWidth+ 200, 1)
 
     return obj
 end
 
-function addKillField(world, x, y, width, height)
+function AddKillField(world, x, y, width, height)
     local obj = world:newRectangleCollider(x, y, width, height)
     obj:setType("static")
     table.insert(drawables,{"kill", x,y, width, height})
@@ -63,21 +63,21 @@ function addKillField(world, x, y, width, height)
     return obj
 end
 
-function addMirroredWalls(world, x, y, width, height)
-    local leftWall = addStaticObject(world, x, y, width, height, true)
-    local rightWall = addStaticObject(world, WindowWidth - x - width, y, width, height, true)
+function AddMirroredWalls(world, x, y, width, height)
+    local leftWall = AddStaticObject(world, x, y, width, height, true)
+    local rightWall = AddStaticObject(world, WindowWidth - x - width, y, width, height, true)
     return leftWall, rightWall
 end
 
-function addStaticObject(world, x, y, width, height, oneWay)
+function AddStaticObject(world, x, y, width, height, oneWay)
     local obj = world:newRectangleCollider(x, y, width, height)
     table.insert(drawables,{"wall", x,y, width, height})
     obj:setCollisionClass('Terrain')
     obj:setType("static")
     if oneWay then
         obj:setPreSolve(function(collider_1, collider_2, contact)
-            local px, py = collider_1:getPosition()
-            local ox, oy = collider_2:getPosition()
+            local _, py = collider_1:getPosition()
+            local _, oy = collider_2:getPosition()
             if py < oy then
                 contact:setEnabled(false)
             end
@@ -86,13 +86,13 @@ function addStaticObject(world, x, y, width, height, oneWay)
     return obj
 end
 
-function addMirroredEnergyFields(world, x1, y1, x2, y2)
-    local leftField = addEnergyField(world, x1, y1, x2, y2)
-    local rightField = addEnergyField(world, WindowWidth - x2, y1, WindowWidth - x1, y2)
+function AddMirroredEnergyFields(world, x1, y1, x2, y2)
+    local leftField = AddEnergyField(world, x1, y1, x2, y2)
+    local rightField = AddEnergyField(world, WindowWidth - x2, y1, WindowWidth - x1, y2)
     return leftField, rightField
 end
 
-function addEnergyField(world, x1, y1, x2, y2)
+function AddEnergyField(world, x1, y1, x2, y2)
     local obj = world:newLineCollider(x1, y1, x2, y2)
     table.insert(drawables,{"energy", x1,y1,x2, y2})
     obj:setType("static")
@@ -101,7 +101,7 @@ function addEnergyField(world, x1, y1, x2, y2)
 end
 
 function GWorld:draw()
-    for i, item in ipairs(drawables) do
+    for _, item in ipairs(drawables) do
         local type, x, y, x1, y1 = unpack(item)
         if type == "wall" then
             love.graphics.push("all")
@@ -117,7 +117,7 @@ function GWorld:draw()
     end
 end
 
-function addCollisionClasses(world)
+function AddCollisionClasses(world)
     world:addCollisionClass('FirePlayer')
     world:addCollisionClass('Terrain')
     world:addCollisionClass('IcePlayer', { ignores = { 'FirePlayer' } })

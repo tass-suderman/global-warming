@@ -48,7 +48,6 @@ function GameOver:draw()
             love.graphics.setColor(0, 1, 1)
         end
         love.graphics.print(item.text, 100, 100 + i * 30)
-        
         love.graphics.pop()
     end
 end
@@ -56,11 +55,11 @@ end
 function GameOver:update(dt)
     if love.joystick then
         local joysticks = love.joystick.getJoysticks()
-        for i, joystick in ipairs(joysticks) do
-            local aButton = joystick:isGamepadDown(menuConfig.selectButton)
-            local upButton = joystick:isGamepadDown(menuConfig.upButton)
-            local downButton = joystick:isGamepadDown(menuConfig.downButton)
-            local yAxis = joystick:getGamepadAxis(menuConfig.yAxis)
+        for _, joystick in ipairs(joysticks) do
+            local aButton = joystick:isGamepadDown(MenuConfig.selectButton)
+            local upButton = joystick:isGamepadDown(MenuConfig.upButton)
+            local downButton = joystick:isGamepadDown(MenuConfig.downButton)
+            local yAxis = joystick:getGamepadAxis(MenuConfig.yAxis)
             if aButton then
                 local item = GameOver.items[GameOver.selected]
                 item.func()
@@ -75,7 +74,6 @@ function GameOver:update(dt)
                 GameOver.cooldown = GameOver.cooldown + dt
             end
         end
-        
         GameOver.cooldown = GameOver.cooldown + dt
         if GameOver.cooldown >= DesiredCooldown then
             GameOver.cooldown = 0
